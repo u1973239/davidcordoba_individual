@@ -38,7 +38,7 @@ var options = function(){
 				options_data.cards = this.num;
 				options_data.dificulty = this.dificulty;
 				save();
-				loadpage("../");
+				loadpage("../index.html");
 			}
 		}
 	});
@@ -60,6 +60,9 @@ console.log(options.getOptionsString());
 console.log(options.getNumOfCards());
 console.log(options.getDificulty());
 console.log(options.options_data);
+
+
+
 
 
 
