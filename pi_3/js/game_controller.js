@@ -2,6 +2,17 @@ const back = "../resources/back.png";
 const items = ["../resources/cb.png","../resources/co.png","../resources/sb.png",
 "../resources/so.png","../resources/tb.png","../resources/to.png"];
 
+var options_data;
+var json = localStorage.getItem("config") || '{"cards:2, dificulty:"hard"}';
+opcions_data = JSON.parse(json);
+   
+function girarCartes(){
+	for (var i = 0; i < game.item.length; i++){
+		game.current_card[i].texture = back;
+		game.current_card[i].done = false;
+	}
+}
+
 var game = new Vue({
 	el: "#game_id",
 	data: {
@@ -9,18 +20,39 @@ var game = new Vue({
 		current_card: [],
 		items: [],
 		num_cards: 2,
-		bad_clicks: 0
+		bad_clicks: 0,
+		temps: 700,
+		dificultatlvl: 20
 	},
 	created: function(){
 		this.username = sessionStorage.getItem("username","unknown");
+		//
+		this.num_cards = options_data.cards;
+		switch (options_data.difficulty){
+			case 'easy':
+				this.temps = 1700;
+				this.dificultatlvl = 10;
+				break;
+			case 'normal':
+				this.temps = 700;
+				this.dificultatlvl = 20;
+				break;
+			case 'hard':
+				this.temps = 30;
+				this.dificultatlvl = 3;
+				break;
+		}
+		//
 		this.items = items.slice(); // Copiem l'array
 		this.items.sort(function(){return Math.random() - 0.5}); // Array aleatòria
 		this.items = this.items.slice(0, this.num_cards); // Agafem els primers numCards elements
 		this.items = this.items.concat(this.items); // Dupliquem els elements
 		this.items.sort(function(){return Math.random() - 0.5}); // Array aleatòria
 		for (var i = 0; i < this.items.length; i++){
-			this.current_card.push({done: false, texture: back});
+			this.current_card.push({done: false, texture: this.items[i]});
 		}
+		const timeout = setTimeout(girarCartes,this.temps);
+		
 	},
 	methods: {
 		clickCard: function(i){
@@ -57,7 +89,7 @@ var game = new Vue({
 	},
 	computed: {
 		score_text: function(){
-			return 100 - this.bad_clicks * 20;
+			return 100 - this.bad_clicks * dificultatlvl;
 		}
 	}
 });
