@@ -2,12 +2,16 @@ const back = "../resources/back.png";
 const items = ["../resources/cb.png","../resources/co.png","../resources/sb.png",
 "../resources/so.png","../resources/tb.png","../resources/to.png"];
 
-var options_data;
-var json = localStorage.getItem("config") || '{"cards:2, dificulty:"hard"}';
-opcions_data = JSON.parse(json);
-   
+var options_data = {
+	cards:2, dificulty:"hard"
+};
+
+var json = localStorage.getItem("config");
+	if(json)
+		options_data = JSON.parse(json);
+
 function girarCartes(){
-	for (var i = 0; i < game.item.length; i++){
+	for (var i = 0; i < game.items.length; i++){
 		game.current_card[i].texture = back;
 		game.current_card[i].done = false;
 	}
@@ -21,46 +25,48 @@ var game = new Vue({
 		items: [],
 		num_cards: 2,
 		bad_clicks: 0,
-		temps: 700,
+		time: 700,
 		dificultatlvl: 20
 	},
 	created: function(){
 		this.username = sessionStorage.getItem("username","unknown");
-		//
+		
 		this.num_cards = options_data.cards;
-		switch (options_data.difficulty){
+		switch (options_data.dificulty){
 			case 'easy':
-				this.temps = 1700;
-				this.dificultatlvl = 10;
+				this.time = 1700;
+				dificultatlvl = 10;
 				break;
 			case 'normal':
-				this.temps = 700;
-				this.dificultatlvl = 20;
+				this.time = 700;
+				dificultatlvl = 20;
 				break;
 			case 'hard':
-				this.temps = 30;
-				this.dificultatlvl = 3;
+				this.time = 300;
+				dificultatlvl = 30;
 				break;
+		
 		}
-		//
 		this.items = items.slice(); // Copiem l'array
 		this.items.sort(function(){return Math.random() - 0.5}); // Array aleatòria
 		this.items = this.items.slice(0, this.num_cards); // Agafem els primers numCards elements
 		this.items = this.items.concat(this.items); // Dupliquem els elements
 		this.items.sort(function(){return Math.random() - 0.5}); // Array aleatòria
 		for (var i = 0; i < this.items.length; i++){
-			this.current_card.push({done: false, texture: this.items[i]});
+			this.current_card.push({done: true, texture: this.items[i]});
 		}
-		const timeout = setTimeout(girarCartes,this.temps);
+		const timeout= setTimeout(girarCartes,this.time);
 		
+
 	},
 	methods: {
 		clickCard: function(i){
-			if (!this.current_card[i].done && this.current_card[i].texture === back)
+			if (!this.current_card[i].done && this.current_card[i].texture === back){
 				Vue.set(this.current_card, i, {done: false, texture: this.items[i]});
+			}
 		}
 	},
-	watch: {
+	watch: {	
 		current_card: function(value){
 			if (value.texture === back) return;
 			var front = null;
