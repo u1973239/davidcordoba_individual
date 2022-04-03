@@ -25,7 +25,7 @@ var game = new Vue({
 		items: [],
 		num_cards: 2,
 		bad_clicks: 0,
-		time: 700,
+		temps: 700,
 		dificultatlvl: 20
 	},
 	created: function(){
@@ -34,15 +34,15 @@ var game = new Vue({
 		this.num_cards = options_data.cards;
 		switch (options_data.dificulty){
 			case 'easy':
-				this.time = 1700;
+				this.temps = 1700;
 				dificultatlvl = 10;
 				break;
 			case 'normal':
-				this.time = 700;
+				this.temps = 700;
 				dificultatlvl = 20;
 				break;
 			case 'hard':
-				this.time = 300;
+				this.temps = 300;
 				dificultatlvl = 30;
 				break;
 		
@@ -55,7 +55,7 @@ var game = new Vue({
 		for (var i = 0; i < this.items.length; i++){
 			this.current_card.push({done: true, texture: this.items[i]});
 		}
-		const timeout= setTimeout(girarCartes,this.time);
+		const timeout= setTimeout(girarCartes,this.temps);
 		
 
 	},
@@ -99,8 +99,6 @@ var game = new Vue({
 		}
 	}
 });
-
-
 
 
 
